@@ -3,8 +3,8 @@ package evaluator
 import (
 	"fmt"
 
-	"github.com/salleaffaire/monkey/ast"
-	"github.com/salleaffaire/monkey/object"
+	"github.com/salleaffaire/gorilla/ast"
+	"github.com/salleaffaire/gorilla/object"
 )
 
 var (

@@ -1,0 +1,3 @@
+
+let a = {true:"Hello Worls, from Gorilla!"}
+puts(a[true])

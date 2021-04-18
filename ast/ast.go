@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/salleaffaire/monkey/token"
+	"github.com/salleaffaire/gorilla/token"
 )
 
 type Node interface {

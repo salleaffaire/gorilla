@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/salleaffaire/monkey/ast"
-	"github.com/salleaffaire/monkey/lexer"
+	"github.com/salleaffaire/gorilla/ast"
+	"github.com/salleaffaire/gorilla/lexer"
 )
 
 func TestReturnStatements(t *testing.T) {

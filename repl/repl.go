@@ -5,13 +5,15 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/salleaffaire/monkey/evaluator"
-	"github.com/salleaffaire/monkey/lexer"
-	"github.com/salleaffaire/monkey/object"
-	"github.com/salleaffaire/monkey/parser"
+	"github.com/salleaffaire/gorilla/evaluator"
+	"github.com/salleaffaire/gorilla/lexer"
+	"github.com/salleaffaire/gorilla/object"
+	"github.com/salleaffaire/gorilla/parser"
 )
 
-const PROMPT = ">> "
+const VERSION = "0.0.1"
+
+const PROMPT = ">>"
 
 const MONKEY_FACE = `            __,__
    .--.  .-"     "-.  .--.
@@ -36,8 +38,11 @@ func printParserErrors(out io.Writer, errors []string) {
 }
 
 func Start(in io.Reader, out io.Writer) {
+
 	scanner := bufio.NewScanner(in)
 	env := object.NewEnvironment()
+
+	fmt.Printf("Gorilla %s REPL\n", VERSION)
 
 	for {
 		fmt.Printf(PROMPT)

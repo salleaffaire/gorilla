@@ -1,20 +1,30 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"io"
 	"os"
-	"os/user"
 
-	"github.com/salleaffaire/monkey/repl"
+	"github.com/salleaffaire/gorilla/core"
+	"github.com/salleaffaire/gorilla/evaluator"
+	"github.com/salleaffaire/gorilla/repl"
 )
 
 func main() {
-	user, err := user.Current()
-	if err != nil {
-		panic(err)
+
+	inputFilenamePtr := flag.String("input", "", "File name of the Gorilla source program to execute")
+
+	flag.Parse()
+
+	if *inputFilenamePtr != "" {
+		fmt.Printf("Excuting %s\n", *inputFilenamePtr)
+		result := core.Start(inputFilenamePtr, os.Stdout)
+		if result != nil && result != evaluator.NULL {
+			io.WriteString(os.Stdout, result.Inspect())
+			io.WriteString(os.Stdout, "\n")
+		}
+	} else {
+		repl.Start(os.Stdin, os.Stdout)
 	}
-	fmt.Printf("Hello %s!\n This is the Monkey programming language!\n",
-		user.Username)
-	fmt.Printf("Feel free to type in commands\n")
-	repl.Start(os.Stdin, os.Stdout)
 }
