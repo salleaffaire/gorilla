@@ -9,6 +9,9 @@ type Lexer struct {
 	position     int
 	readPosition int
 	ch           byte
+
+	// Keep token dependent state
+	state bool
 }
 
 func New(input string) *Lexer {
@@ -97,8 +100,12 @@ func (l *Lexer) NextToken() token.Token {
 			tok.Type = token.LookupIdent(tok.Literal)
 			return tok
 		} else if isDigit(l.ch) {
-			tok.Type = token.INT
 			tok.Literal = l.readNumber()
+			if l.state {
+				tok.Type = token.FLOAT
+			} else {
+				tok.Type = token.INT
+			}
 			return tok
 		} else {
 			tok = newToken(token.ILLEGAL, l.ch)
@@ -143,9 +150,13 @@ func (l *Lexer) peekChar() byte {
 
 func (l *Lexer) readNumber() string {
 	position := l.position
-	for isDigit(l.ch) {
+	l.state = false
+	for isDigit(l.ch) || l.ch == '.' {
 		// fmt.Println("Digit: ", string(l.ch))
 		l.readChar()
+		if l.ch == '.' {
+			l.state = true
+		}
 	}
 	return l.input[position:l.position]
 }

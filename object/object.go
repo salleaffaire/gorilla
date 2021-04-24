@@ -16,6 +16,11 @@ type Object interface {
 	Inspect() string
 }
 
+type FloatableObject interface {
+	Object
+	ToFloat() float64
+}
+
 type BuiltinFunction func(args ...Object) Object
 
 const (
@@ -29,6 +34,7 @@ const (
 	BUILTIN_OBJ      = "BUILTIN"
 	ARRAY_OBJ        = "ARRAY"
 	HASH_OBJ         = "HASH"
+	FLOAT_OBJ        = "FLOAT"
 )
 
 // ------------------------------ Integer -----------------------------------
@@ -45,7 +51,29 @@ func (i *Integer) Type() ObjectType {
 	return INTEGER_OBJ
 }
 
-// ------------------------------ Integer -----------------------------------
+func (i *Integer) ToFloat() float64 {
+	return float64(i.Value)
+}
+
+// ------------------------------ Float -----------------------------------
+
+type Float struct {
+	Value float64
+}
+
+func (f *Float) Inspect() string {
+	return fmt.Sprintf("%g", f.Value)
+}
+
+func (f *Float) Type() ObjectType {
+	return FLOAT_OBJ
+}
+
+func (i *Float) ToFloat() float64 {
+	return i.Value
+}
+
+// ------------------------------ String -----------------------------------
 
 type String struct {
 	Value string
