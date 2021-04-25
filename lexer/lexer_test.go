@@ -31,6 +31,10 @@ if (5 < 10) {
 {"foo": "bar"}
 4.5
 [0.001, 0.0002]
+
+while (true) {
+	let x = 6
+}
 `
 
 	tests := []struct {
@@ -136,6 +140,17 @@ if (5 < 10) {
 		{token.COMMA, ","},
 		{token.FLOAT, "0.0002"},
 		{token.RBRACKET, "]"},
+
+		{token.WHILE, "while"},
+		{token.LPAREN, "("},
+		{token.TRUE, "true"},
+		{token.RPAREN, ")"},
+		{token.LBRACE, "{"},
+		{token.LET, "let"},
+		{token.IDENT, "x"},
+		{token.ASSIGN, "="},
+		{token.INT, "6"},
+		{token.RBRACE, "}"},
 
 		{token.EOF, ""},
 	}

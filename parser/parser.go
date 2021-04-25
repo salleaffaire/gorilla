@@ -92,6 +92,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.FALSE, p.parseBoolean)
 	p.registerPrefix(token.LPAREN, p.parseGroupedExpression)
 	p.registerPrefix(token.IF, p.parseIfExpression)
+	p.registerPrefix(token.WHILE, p.parseWhileExpression)
 	p.registerPrefix(token.FUNCTION, p.parseFunctionLiteral)
 	p.registerPrefix(token.STRING, p.parseStringLiteral)
 	p.registerPrefix(token.LBRACKET, p.parseArrayLiteral)
@@ -392,10 +393,41 @@ func (p *Parser) parseIfExpression() ast.Expression {
 	return expression
 }
 
+func (p *Parser) parseWhileExpression() ast.Expression {
+	expression := &ast.WhileExpression{
+		Token: p.curToken,
+	}
+
+	// Validate that peekToken is '(' and advance curToken to it
+	if !p.expectPeek(token.LPAREN) {
+		return nil
+	}
+
+	// Skip '('
+	p.nextToken()
+
+	expression.Condition = p.parseExpression(LOWEST)
+
+	// Validate that peekToken is ')' and advance curToken to it
+	if !p.expectPeek(token.RPAREN) {
+		return nil
+	}
+
+	// Validate that peekToken is '{' and advance curToken to it
+	if !p.expectPeek(token.LBRACE) {
+		return nil
+	}
+
+	expression.Body = p.parseBlockStatement()
+
+	return expression
+}
+
 func (p *Parser) parseBlockStatement() *ast.BlockStatement {
 	block := &ast.BlockStatement{Token: p.curToken}
 	block.Statements = []ast.Statement{}
 
+	// Skip '{'
 	p.nextToken()
 
 	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {

@@ -381,35 +381,35 @@ func TestParsingInfixExpressions(t *testing.T) {
 		operator   string
 		rightValue interface{}
 	}{
-		// {"5 + 5;", 5, "+", 5},
-		// {"5 - 5;", 5, "-", 5},
-		// {"5 * 5;", 5, "*", 5},
-		// {"5 / 5;", 5, "/", 5},
-		// {"5 > 5;", 5, ">", 5},
-		// {"5 < 5;", 5, "<", 5},
-		// {"5 == 5;", 5, "==", 5},
-		// {"5 != 5;", 5, "!=", 5},
+		{"5 + 5;", 5, "+", 5},
+		{"5 - 5;", 5, "-", 5},
+		{"5 * 5;", 5, "*", 5},
+		{"5 / 5;", 5, "/", 5},
+		{"5 > 5;", 5, ">", 5},
+		{"5 < 5;", 5, "<", 5},
+		{"5 == 5;", 5, "==", 5},
+		{"5 != 5;", 5, "!=", 5},
 		{"5.1 + 5.1;", 5.1, "+", 5.1},
-		// {"5 + 5.1;", 5, "+", 5.1},
-		// {"5.1 - 5.1;", 5.1, "-", 5.1},
-		// {"5.1 * 5.1;", 5.1, "*", 5.1},
-		// {"5.1 / 5.1;", 5.1, "/", 5.1},
-		// {"5.1 > 5.1;", 5.1, ">", 5.1},
-		// {"5.1 < 5.1;", 5.1, "<", 5.1},
-		// {"5.1 == 5.1;", 5.1, "==", 5.1},
-		// {"5.1 != 5.1;", 5.1, "!=", 5.1},
-		//{"foobar + barfoo;", "foobar", "+", "barfoo"},
-		//{"foobar - barfoo;", "foobar", "-", "barfoo"},
-		//{"foobar * barfoo;", "foobar", "*", "barfoo"},
-		//{"foobar / barfoo;", "foobar", "/", "barfoo"},
-		//{"foobar > barfoo;", "foobar", ">", "barfoo"},
-		//{"foobar < barfoo;", "foobar", "<", "barfoo"},
-		//{"foobar == barfoo;", "foobar", "==", "barfoo"},
-		//{"foobar != barfoo;", "foobar", "!=", "barfoo"},
+		{"5 + 5.1;", 5, "+", 5.1},
+		{"5.1 - 5.1;", 5.1, "-", 5.1},
+		{"5.1 * 5.1;", 5.1, "*", 5.1},
+		{"5.1 / 5.1;", 5.1, "/", 5.1},
+		{"5.1 > 5.1;", 5.1, ">", 5.1},
+		{"5.1 < 5.1;", 5.1, "<", 5.1},
+		{"5.1 == 5.1;", 5.1, "==", 5.1},
+		{"5.1 != 5.1;", 5.1, "!=", 5.1},
+		{"foobar + barfoo;", "foobar", "+", "barfoo"},
+		{"foobar - barfoo;", "foobar", "-", "barfoo"},
+		{"foobar * barfoo;", "foobar", "*", "barfoo"},
+		{"foobar / barfoo;", "foobar", "/", "barfoo"},
+		{"foobar > barfoo;", "foobar", ">", "barfoo"},
+		{"foobar < barfoo;", "foobar", "<", "barfoo"},
+		{"foobar == barfoo;", "foobar", "==", "barfoo"},
+		{"foobar != barfoo;", "foobar", "!=", "barfoo"},
 		{"true == true", true, "==", true},
 		{"true != false", true, "!=", false},
 		{"false == false", false, "==", false},
-		// {"false < false", false, "<", false},
+		{"false < false", false, "<", false},
 	}
 
 	for _, tt := range infixTests {
@@ -478,74 +478,74 @@ func TestOperatorPrecedenceParsing(t *testing.T) {
 			"add((a * (b[2])), (b[1]), (2 * ([1, 2][1])))",
 		},
 
-		// {
-		// 	"-a * b",
-		// 	"((-a) * b)",
-		// },
-		// {
-		// 	"!-a",
-		// 	"(!(-a))",
-		// },
-		// {
-		// 	"a + b + c",
-		// 	"((a + b) + c)",
-		// },
-		// {
-		// 	"a + b - c",
-		// 	"((a + b) - c)",
-		// },
-		// {
-		// 	"a * b * c",
-		// 	"((a * b) * c)",
-		// },
-		// {
-		// 	"a * b / c",
-		// 	"((a * b) / c)",
-		// },
-		// {
-		// 	"a + b / c",
-		// 	"(a + (b / c))",
-		// },
-		// {
-		// 	"true",
-		// 	"true",
-		// },
-		// {
-		// 	"false",
-		// 	"false",
-		// },
-		// {
-		// 	"3 > 5 == false",
-		// 	"((3 > 5) == false)",
-		// },
-		// {
-		// 	"3 < 5 == true",
-		// 	"((3 < 5) == true)",
-		// },
-		// {
-		// 	"a + b * c + d / e - f",
-		// 	"(((a + (b * c)) + (d / e)) - f)",
-		// },
-		// {
-		// 	"3 + 4; -5 * 5",
-		// 	"(3 + 4)((-5) * 5)",
-		// },
-		// {
-		// 	"5 > 4 == 3 < 4",
-		// 	"((5 > 4) == (3 < 4))",
-		// },
-		// {
-		// 	"5 < 4 != 3 > 4",
-		// 	"((5 < 4) != (3 > 4))",
-		// },
-		// {
-		// 	"3 + 4 * 5 == 3 * 1 + 4 * 5",
-		// 	"((3 + (4 * 5)) == ((3 * 1) + (4 * 5)))",
-		// },
-		// {
-		// 	"3 + 4 * 5 == 3 * 1 + 4 * 5",
-		// 	"((3 + (4 * 5)) == ((3 * 1) + (4 * 5)))",
-		// },
+		{
+			"-a * b",
+			"((-a) * b)",
+		},
+		{
+			"!-a",
+			"(!(-a))",
+		},
+		{
+			"a + b + c",
+			"((a + b) + c)",
+		},
+		{
+			"a + b - c",
+			"((a + b) - c)",
+		},
+		{
+			"a * b * c",
+			"((a * b) * c)",
+		},
+		{
+			"a * b / c",
+			"((a * b) / c)",
+		},
+		{
+			"a + b / c",
+			"(a + (b / c))",
+		},
+		{
+			"true",
+			"true",
+		},
+		{
+			"false",
+			"false",
+		},
+		{
+			"3 > 5 == false",
+			"((3 > 5) == false)",
+		},
+		{
+			"3 < 5 == true",
+			"((3 < 5) == true)",
+		},
+		{
+			"a + b * c + d / e - f",
+			"(((a + (b * c)) + (d / e)) - f)",
+		},
+		{
+			"3 + 4; -5 * 5",
+			"(3 + 4)((-5) * 5)",
+		},
+		{
+			"5 > 4 == 3 < 4",
+			"((5 > 4) == (3 < 4))",
+		},
+		{
+			"5 < 4 != 3 > 4",
+			"((5 < 4) != (3 > 4))",
+		},
+		{
+			"3 + 4 * 5 == 3 * 1 + 4 * 5",
+			"((3 + (4 * 5)) == ((3 * 1) + (4 * 5)))",
+		},
+		{
+			"3 + 4 * 5 == 3 * 1 + 4 * 5",
+			"((3 + (4 * 5)) == ((3 * 1) + (4 * 5)))",
+		},
 	}
 	for _, tt := range tests {
 		l := lexer.New(tt.input)
@@ -691,6 +691,43 @@ func TestIfElseExpression(t *testing.T) {
 	}
 
 	if !testIdentifier(t, alternative.Expression, "y") {
+		return
+	}
+}
+
+func TestWhileExpression(t *testing.T) {
+	input := `while (x < y) { y }`
+	l := lexer.New(input)
+	p := New(l)
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+	if len(program.Statements) != 1 {
+		t.Fatalf("program.Body does not contain %d statements. got=%d\n",
+			1, len(program.Statements))
+	}
+	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	if !ok {
+		t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T",
+			program.Statements[0])
+	}
+	exp, ok := stmt.Expression.(*ast.WhileExpression)
+	if !ok {
+		t.Fatalf("stmt.Expression is not ast.WhileExpression. got=%T",
+			stmt.Expression)
+	}
+	if !testInfixExpression(t, exp.Condition, "x", "<", "y") {
+		return
+	}
+	if len(exp.Body.Statements) != 1 {
+		t.Errorf("consequence is not 1 statements. got=%d\n",
+			len(exp.Body.Statements))
+	}
+	body, ok := exp.Body.Statements[0].(*ast.ExpressionStatement)
+	if !ok {
+		t.Fatalf("Statements[0] is not ast.ExpressionStatement. got=%T",
+			exp.Body.Statements[0])
+	}
+	if !testIdentifier(t, body.Expression, "y") {
 		return
 	}
 }
