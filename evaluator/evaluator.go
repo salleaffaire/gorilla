@@ -494,6 +494,18 @@ func evalStringInfixExpression(operator string, left, right object.Object) objec
 	switch operator {
 	case "+":
 		return &object.String{Value: leftVal + rightVal}
+	case "==":
+		if leftVal == rightVal {
+			return TRUE
+		} else {
+			return FALSE
+		}
+	case "!=":
+		if leftVal != rightVal {
+			return TRUE
+		} else {
+			return FALSE
+		}
 	}
 
 	return newError("unknown operator: %s %s %s",

@@ -1,0 +1,5 @@
+let arr = []
+let element = 0
+while ((element = gets()) != "") { 
+  arr = push(arr, element) 
+}

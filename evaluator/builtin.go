@@ -1,7 +1,9 @@
 package evaluator
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 
 	"github.com/salleaffaire/gorilla/object"
 )
@@ -113,6 +115,25 @@ var builtins = map[string]*object.Builtin{
 				fmt.Println(arg.Inspect())
 			}
 			return NULL
+		},
+	},
+	"gets": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 0 {
+				return newError("wrong number of arguments. got=%d, want=0",
+					len(args))
+			}
+			// var input string
+			// n, _ := fmt.Scanf("%s", &input)
+			// fmt.Println("Scanned", n)
+			scanner := bufio.NewScanner(os.Stdin)
+			scanned := scanner.Scan()
+			if !scanned {
+				return &object.String{Value: "input"}
+			}
+
+			line := scanner.Text()
+			return &object.String{Value: line}
 		},
 	},
 }
