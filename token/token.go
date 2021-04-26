@@ -45,6 +45,7 @@ const (
 	ELSE     = "ELSE"
 	WHILE    = "WHILE"
 	RETURN   = "RETURN"
+	NULL     = "NULL"
 )
 
 var keywords = map[string]TokenType{
@@ -56,6 +57,7 @@ var keywords = map[string]TokenType{
 	"else":   ELSE,
 	"while":  WHILE,
 	"return": RETURN,
+	"null":   NULL,
 }
 
 func LookupIdent(ident string) TokenType {

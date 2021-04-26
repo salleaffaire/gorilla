@@ -1,0 +1,6 @@
+let c = 3
+if (while (c > 7) { c = c - 1; puts(c); c; } == 8) { 
+  puts("Holley") 
+} else {
+  puts("Not Holley :(")
+}

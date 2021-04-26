@@ -40,6 +40,9 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 	case *ast.WhileExpression:
 		return evalWhileExpression(node, env)
 
+	case *ast.AssignmentExpression:
+		return evalAssignmentExpression(node, env)
+
 	case *ast.ReturnStatement:
 		val := Eval(node.ReturnValue, env)
 		if isError(val) {
@@ -105,6 +108,9 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		}
 
 		return evalInfixExpression(node.Operator, left, right)
+
+	case *ast.NullLiteral:
+		return NULL
 
 	case *ast.IntegerLiteral:
 		return &object.Integer{Value: node.Value}
@@ -308,15 +314,31 @@ func evalWhileExpression(we *ast.WhileExpression, env *object.Environment) objec
 		return condition
 	}
 
+	var lastValue object.Object = NULL
+
 	for isTruthy(condition) {
-		Eval(we.Body, env)
+		lastValue = Eval(we.Body, env)
 		condition = Eval(we.Condition, env)
 		if isError(condition) {
 			return condition
 		}
 	}
 
-	return NULL
+	return lastValue
+}
+
+func evalAssignmentExpression(ae *ast.AssignmentExpression, env *object.Environment) object.Object {
+
+	if _, ok := env.Get(ae.Name.Value); !ok {
+		return newError("identifier not found: " + ae.Name.Value)
+	}
+
+	val := Eval(ae.Value, env)
+	if isError(val) {
+		return val
+	}
+	env.Set(ae.Name.Value, val)
+	return val
 }
 
 func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object {
@@ -374,19 +396,31 @@ func evalInfixExpression(operator string, left object.Object, right object.Objec
 	case leftFloatable && rightFloatable:
 		return evalFloatableInfixExpression(operator, leftVal, rightVal)
 
+	case left.Type() == object.STRING_OBJ && right.Type() == object.STRING_OBJ:
+		return evalStringInfixExpression(operator, left, right)
+
+	case operator == "==":
+		switch {
+		case left.Type() != right.Type():
+			return FALSE
+		default:
+			return nativeBoolToBooleanObject(left == right)
+		}
+
+	case operator == "!=":
+		switch {
+		case left.Type() != right.Type():
+			return TRUE
+		default:
+			return nativeBoolToBooleanObject(left != right)
+		}
+
 	case left.Type() != right.Type():
 		return newError("type mismatch: %s %s %s",
 			left.Type(), operator, right.Type())
 
-	case left.Type() == object.STRING_OBJ && right.Type() == object.STRING_OBJ:
-		return evalStringInfixExpression(operator, left, right)
-	case operator == "==":
-		return nativeBoolToBooleanObject(left == right)
-	case operator == "!=":
-		return nativeBoolToBooleanObject(left != right)
-
 	default:
-		return newError("unknown operator: %s %s %s",
+		return newError("unknown operation: %s %s %s",
 			left.Type(), operator, right.Type())
 
 	}

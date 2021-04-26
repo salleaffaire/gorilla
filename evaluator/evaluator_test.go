@@ -77,6 +77,20 @@ func TestStringConcatenation(t *testing.T) {
 	}
 }
 
+func TestEvalNullExpression(t *testing.T) {
+	tests := []struct {
+		input string
+
+		expected interface{}
+	}{
+		{"null", nil},
+	}
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		testNullObject(t, evaluated)
+	}
+}
+
 func TestEvalBooleanExpression(t *testing.T) {
 	tests := []struct {
 		input string
@@ -84,6 +98,12 @@ func TestEvalBooleanExpression(t *testing.T) {
 		expected bool
 	}{
 		{"true", true},
+		{"!true", false},
+		{"!!true", true},
+		{"!2", false},
+		{"!!2", true},
+		{"!0", false},
+		{"!!0", true},
 		{"false", false},
 		{"1 < 2", true},
 		{"1 > 2", false},
@@ -102,6 +122,15 @@ func TestEvalBooleanExpression(t *testing.T) {
 		{"(1 < 2) == false", false},
 		{"(1 > 2) == true", false},
 		{"(1 > 2) == false", true},
+		{"[] == 2", false},
+		{"[] != 2", true},
+		{"5.6 == 5.6", true},
+		{"5.0 == 5.1", false},
+		{"5 != 5.6", true},
+		{"5 == 5.1", false},
+		{"while (false) {} != true", true},
+		{"while (false) {} == true", false},
+		{"!(while (false) {} == true)", true},
 	}
 	for _, tt := range tests {
 		evaluated := testEval(tt.input)
@@ -258,6 +287,18 @@ func TestLetStatements(t *testing.T) {
 		{"let a = 5 * 5; a;", 25},
 		{"let a = 5; let b = a; b;", 5},
 		{"let a = 5; let b = a; let c = a + b + 5; c;", 15},
+	}
+	for _, tt := range tests {
+		testIntegerObject(t, testEval(tt.input), tt.expected)
+	}
+}
+
+func TestAssignmentExpression(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected int64
+	}{
+		{"let a = 5; a = 6; a;", 6},
 	}
 	for _, tt := range tests {
 		testIntegerObject(t, testEval(tt.input), tt.expected)

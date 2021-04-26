@@ -103,6 +103,14 @@ func (i *Identifier) expressionNode()      {}
 func (i *Identifier) TokenLiteral() string { return i.Token.Literal }
 func (i *Identifier) String() string       { return i.Value }
 
+type NullLiteral struct {
+	Token token.Token
+}
+
+func (nl *NullLiteral) expressionNode()      {}
+func (nl *NullLiteral) TokenLiteral() string { return nl.Token.Literal }
+func (nl *NullLiteral) String() string       { return nl.Token.Literal }
+
 type IntegerLiteral struct {
 	Token token.Token
 	Value int64
@@ -176,6 +184,25 @@ func (oe *InfixExpression) String() string {
 	out.WriteString(oe.Right.String())
 	out.WriteString(")")
 
+	return out.String()
+}
+
+type AssignmentExpression struct {
+	Token token.Token
+	Name  *Identifier
+	Value Expression
+}
+
+func (ae *AssignmentExpression) expressionNode()      {}
+func (ae *AssignmentExpression) TokenLiteral() string { return ae.Token.Literal }
+
+func (ae *AssignmentExpression) String() string {
+	var out bytes.Buffer
+	out.WriteString(ae.Name.String())
+	out.WriteString(" = ")
+	if ae.Value != nil {
+		out.WriteString(ae.Value.String())
+	}
 	return out.String()
 }
 
