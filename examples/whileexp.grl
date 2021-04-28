@@ -1,10 +1,8 @@
-let c = 20
-if (while (c > 7) { 
-      c = c - 1
-      puts(c)
-      c
-    } == 8) { 
-  puts("Holley") 
-} else {
-  puts("Not Holley :(")
-}
+let str = "Luc"
+
+let i = 0
+while (i < len(str)) {
+  let r = str[i]
+  i = i + 1
+  puts(r)
+} 
