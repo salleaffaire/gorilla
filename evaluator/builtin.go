@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/salleaffaire/gorilla/object"
 )
@@ -134,6 +135,36 @@ var builtins = map[string]*object.Builtin{
 
 			line := scanner.Text()
 			return &object.String{Value: line}
+		},
+	},
+	"string": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1",
+					len(args))
+			}
+			if args[0].Type() != object.INTEGER_OBJ && args[0].Type() != object.FLOAT_OBJ {
+				return newError("argument to `string` must be INTEGER, got %s",
+					args[0].Type())
+			}
+			integer, ok := args[0].(*object.Integer)
+			if ok {
+				return &object.String{Value: strconv.FormatInt(integer.Value, 10)}
+			}
+			fl := args[0].(*object.Float)
+			s := fmt.Sprintf("%g", fl.Value)
+			return &object.String{Value: s}
+
+		},
+	},
+	"typeof": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1",
+					len(args))
+			}
+
+			return &object.String{Value: string(args[0].Type())}
 		},
 	},
 }

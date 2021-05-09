@@ -80,6 +80,23 @@ func (rs *ReturnStatement) String() string {
 	return out.String()
 }
 
+type YieldStatement struct {
+	Token      token.Token
+	YieldValue Expression
+}
+
+func (ys *YieldStatement) statementNode()       {}
+func (ys *YieldStatement) TokenLiteral() string { return ys.Token.Literal }
+func (ys *YieldStatement) String() string {
+	var out bytes.Buffer
+	out.WriteString(ys.TokenLiteral() + " ")
+	if ys.YieldValue != nil {
+		out.WriteString(ys.YieldValue.String())
+	}
+	out.WriteString(";")
+	return out.String()
+}
+
 type ExpressionStatement struct {
 	Token      token.Token
 	Expression Expression

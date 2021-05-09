@@ -32,6 +32,8 @@ func Start(input *string, out io.Writer) object.Object {
 	}
 
 	env := object.NewEnvironment()
+	ctx := object.NewYieldContext()
+
 	l := lexer.New(string(dat))
 	p := parser.New(l)
 
@@ -42,7 +44,7 @@ func Start(input *string, out io.Writer) object.Object {
 		return evaluator.NULL
 	}
 
-	evaluated := evaluator.Eval(program, env)
+	evaluated := evaluator.Eval(program, env, ctx)
 
 	return evaluated
 }

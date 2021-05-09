@@ -265,6 +265,8 @@ func (b *Builtin) Inspect() string {
 	return "builtin function"
 }
 
+// --------------------------- Environment ------------------------------------
+
 type Environment struct {
 	store map[string]Object
 	outer *Environment
@@ -292,4 +294,26 @@ func (e *Environment) Get(name string) (Object, bool) {
 func (e *Environment) Set(name string, val Object) Object {
 	e.store[name] = val
 	return val
+}
+
+// --------------------------- Yield Context -------------------------------
+
+type YieldCtx struct {
+	Objects Array
+	outer   *YieldCtx
+}
+
+func NewEnclosedYieldContext(outer *YieldCtx) *YieldCtx {
+	ctx := NewYieldContext()
+	ctx.outer = outer
+	return ctx
+}
+
+func NewYieldContext() *YieldCtx {
+	a := Array{Elements: []Object{}}
+	return &YieldCtx{Objects: a, outer: nil}
+}
+
+func (yc *YieldCtx) Add(o Object) {
+	yc.Objects.Elements = append(yc.Objects.Elements, o)
 }

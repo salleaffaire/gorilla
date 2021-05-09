@@ -184,6 +184,38 @@ func TestWhileExpressions(t *testing.T) {
 	}
 }
 
+func TestWhileExpressionsWithYield(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected []int64
+	}{
+		{`let x = 0
+		  while (x < 10) {
+			   let x = x + 1
+				 if (x < 5) {
+					 yield x
+				 }
+			}`,
+			[]int64{0, 1, 2, 3, 4}},
+	}
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		result, ok := evaluated.(*object.Array)
+		if ok {
+			if len(result.Elements) != 4 {
+				t.Errorf("evaluated array length is not 4, got %d", len(result.Elements))
+			} else {
+				testIntegerObject(t, result.Elements[0], 1)
+				testIntegerObject(t, result.Elements[1], 2)
+				testIntegerObject(t, result.Elements[2], 3)
+				testIntegerObject(t, result.Elements[3], 4)
+			}
+		} else {
+			t.Errorf("evaluated is not Array. got=%T", evaluated)
+		}
+	}
+}
+
 func TestReturnStatements(t *testing.T) {
 	tests := []struct {
 		input    string
@@ -357,7 +389,8 @@ func testEval(input string) object.Object {
 	p := parser.New(l)
 	program := p.ParseProgram()
 	env := object.NewEnvironment()
-	return Eval(program, env)
+	ctx := object.NewYieldContext()
+	return Eval(program, env, ctx)
 }
 
 func testNullObject(t *testing.T, obj object.Object) bool {
