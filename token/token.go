@@ -44,6 +44,7 @@ const (
 	IF       = "IF"
 	ELSE     = "ELSE"
 	WHILE    = "WHILE"
+	YIELD    = "YIELD"
 	RETURN   = "RETURN"
 	NULL     = "NULL"
 )
@@ -56,6 +57,7 @@ var keywords = map[string]TokenType{
 	"if":     IF,
 	"else":   ELSE,
 	"while":  WHILE,
+	"yield":  YIELD,
 	"return": RETURN,
 	"null":   NULL,
 }

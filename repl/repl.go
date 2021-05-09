@@ -26,6 +26,7 @@ func Start(in io.Reader, out io.Writer) {
 
 	scanner := bufio.NewScanner(in)
 	env := object.NewEnvironment()
+	ctx := object.NewYieldContext()
 
 	fmt.Printf("Gorilla %s REPL\n", VERSION)
 
@@ -49,7 +50,7 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		evaluated := evaluator.Eval(program, env)
+		evaluated := evaluator.Eval(program, env, ctx)
 
 		if evaluated != nil {
 			io.WriteString(out, evaluated.Inspect())

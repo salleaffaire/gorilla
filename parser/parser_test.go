@@ -44,6 +44,42 @@ func TestReturnStatements(t *testing.T) {
 	}
 }
 
+func TestYieldStatements(t *testing.T) {
+	tests := []struct {
+		input         string
+		expectedValue interface{}
+	}{
+		{"yield 5;", 5},
+		{"yield true;", true},
+		{"yield foobar;", "foobar"},
+	}
+
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := New(l)
+		program := p.ParseProgram()
+		checkParserErrors(t, p)
+
+		if len(program.Statements) != 1 {
+			t.Fatalf("program.Statements does not contain 1 statements. got=%d",
+				len(program.Statements))
+		}
+
+		stmt := program.Statements[0]
+		yieldStmt, ok := stmt.(*ast.YieldStatement)
+		if !ok {
+			t.Fatalf("stmt not *ast.YieldStatement. got=%T", stmt)
+		}
+		if yieldStmt.TokenLiteral() != "yield" {
+			t.Fatalf("yieldStmt.TokenLiteral not 'yield', got %q",
+				yieldStmt.TokenLiteral())
+		}
+		if testLiteralExpression(t, yieldStmt.YieldValue, tt.expectedValue) {
+			return
+		}
+	}
+}
+
 func TestLetStatements(t *testing.T) {
 	tests := []struct {
 		input              string

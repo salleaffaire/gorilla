@@ -1,6 +1,25 @@
-let c = 3
-if (while (c > 7) { c = c - 1; puts(c); c; } == 8) { 
-  puts("Holley") 
-} else {
-  puts("Not Holley :(")
+let x = 0
+let name = "Luc Martel"
+
+let us = while (x < len(name)) {
+  if (name[x] == "u") {
+    puts(name[x])
+    yield name[x]
+  }
+  let y = 0
+  puts(while (y < 10) {
+    let z = 0
+    puts(while (z < 10) {
+      yield z
+      z = z + 1
+      puts("Z: " + string(z))
+    })
+    yield y
+    y = y + 1
+    puts("Y: " + string(y))
+  })
+  puts(x)
+  x = x + 1
 }
+
+puts(us)

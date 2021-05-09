@@ -153,6 +153,8 @@ func (p *Parser) parseStatement() ast.Statement {
 		return p.parseLetStatement()
 	case token.RETURN:
 		return p.parseReturnStatement()
+	case token.YIELD:
+		return p.parseYieldStatement()
 	default:
 		return p.parseExpressionStatement()
 	}
@@ -188,6 +190,21 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	p.nextToken()
 
 	stmt.ReturnValue = p.parseExpression(LOWEST)
+
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+	return stmt
+}
+
+func (p *Parser) parseYieldStatement() *ast.YieldStatement {
+	stmt := &ast.YieldStatement{Token: p.curToken}
+
+	// Skip 'yield'
+	p.nextToken()
+
+	// Parse the expression
+	stmt.YieldValue = p.parseExpression(LOWEST)
 
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
