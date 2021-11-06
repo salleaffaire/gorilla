@@ -1,7 +1,6 @@
 package lexer
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/salleaffaire/gorilla/token"
@@ -171,9 +170,9 @@ while (true) {
 				i, tt.expectedLiteral, tok.Literal)
 		}
 
-		fmt.Println("Token Type   : ", tok.Type)
-		fmt.Println("Token Literal: ", tok.Literal)
-		fmt.Println()
+		// fmt.Println("Token Type   : ", tok.Type)
+		// fmt.Println("Token Literal: ", tok.Literal)
+		// fmt.Println()
 
 	}
 }

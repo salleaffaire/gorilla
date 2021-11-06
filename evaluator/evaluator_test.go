@@ -261,23 +261,23 @@ func TestErrorHandling(t *testing.T) {
 		},
 		{
 			"-true",
-			"unknown operator: -BOOLEAN",
+			"unknown operation: -BOOLEAN",
 		},
 		{
 			"true + false;",
-			"unknown operator: BOOLEAN + BOOLEAN",
+			"unknown operation: BOOLEAN + BOOLEAN",
 		},
 		{
 			"5; true + false; 5",
-			"unknown operator: BOOLEAN + BOOLEAN",
+			"unknown operation: BOOLEAN + BOOLEAN",
 		},
 		{
 			"if (10 > 1) { true + false; }",
-			"unknown operator: BOOLEAN + BOOLEAN",
+			"unknown operation: BOOLEAN + BOOLEAN",
 		},
 		{
 			`"Hello" - "World"`,
-			"unknown operator: STRING - STRING",
+			"unknown operation: STRING - STRING",
 		},
 		{
 			`{"name": "Monkey"}[fn(x) { x }];`,
@@ -292,7 +292,7 @@ func TestErrorHandling(t *testing.T) {
 				return 1;
 			}
 			`,
-			"unknown operator: BOOLEAN + BOOLEAN",
+			"unknown operation: BOOLEAN + BOOLEAN",
 		},
 	}
 	for _, tt := range tests {
